@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="calculator">
+    
+    <h3>Simple Calculator</h3>
+
+    {% if result is not None %}
+        <div class="result-display">
+            Result: {{ result }}
+        </div>
+    {% else %}
+        <div class="result-display">
+            Enter values below
+        </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'calculator' %}">
+        {% csrf_token %}
+        <input type="text" name="num1" id="num1" placeholder="First Number" value="{{ num1|default_if_none:'' }}" required><br><br>
+        <input type="text" name="num2" id="num2" placeholder="Second Number" value="{{ num2|default_if_none:'' }}" required><br><br>
+        
+        <input type="hidden" name="operation" id="operation-field" required>
+
+        <div class="button-row">
+            <button type="submit" class="calc-button" onclick="setOperation('add')">+</button>
+            <button type="submit" class="calc-button" onclick="setOperation('subtract')">-</button>
+            <button type="submit" class="calc-button" onclick="setOperation('multiply')">*</button>
+            <button type="submit" class="calc-button" onclick="setOperation('divide')">/</button>
+        </div>
+    </form>
+
+    <script>
+        /**
+         * Sets the value of the hidden operation field before submitting the form.
+         * @param {string} op - The operation to perform ('add', 'subtract', etc.)
+         */
+        function setOperation(op) {
+            document.getElementById('operation-field').value = op;
+        }
+    </script>
+</div>
+{% endblock content %}
